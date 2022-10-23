@@ -10,9 +10,7 @@ namespace PlanAjourneyPageProject.Drivers
 {
     public class DriverHelper
     {
-        public static IWebDriver? driver;
-        
-    
+        public IWebDriver? driver;
      }
 }
 

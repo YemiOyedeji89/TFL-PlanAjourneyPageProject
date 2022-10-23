@@ -9,6 +9,7 @@ using WebDriverManager;
 using WebDriverManager.DriverConfigs.Impl;
 
 using PlanAjourneyPageProject.Pages;
+using BoDi;
 
 namespace PlanAjourneyPageProject.Base
 {
@@ -16,8 +17,14 @@ namespace PlanAjourneyPageProject.Base
     public class Hooks : DriverHelper
     {
         public static ChromeOptions? options;
-        
-        
+        ObjectContainer container;
+
+        public Hooks (IObjectContainer _container)
+        {
+            container = (ObjectContainer)_container;
+           
+        }
+
         [BeforeScenario]
 
 
@@ -28,6 +35,8 @@ namespace PlanAjourneyPageProject.Base
             options = new ChromeOptions();
             options.AddArgument("--start-maximized");
             driver = new ChromeDriver(options);
+            container.RegisterInstanceAs(driver);
+
             driver.Navigate().GoToUrl("https://tfl.gov.uk");
 
             
@@ -60,9 +69,9 @@ namespace PlanAjourneyPageProject.Base
 
 
         [AfterScenario]
-        public static void AfterScenario()
+        public static void AfterScenario(IWebDriver driver)
         {
-            driver?.Quit();
+            driver.Quit();
 
             using (var process = Process.GetCurrentProcess())
 
